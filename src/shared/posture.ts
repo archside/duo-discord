@@ -57,14 +57,36 @@ export function railFrame(shape: Shape): (Rect & { edge: Band['edge'] }) | null 
 	return { edge: band.edge, x: band.frame.x, y: top, width: band.frame.width, height: bottom - top };
 }
 
-export type Toolbar = { frame: Rect };
+// Measured on both displays: the system centres its side status column 6 pt inside the
+// band's centre, toward the content. Folded, the front camera sits in that column, so its
+// region gives the centre exactly.
+const STATUS_COLUMN_SHIFT = 6;
+
+export function statusColumnCenter(shape: Shape): number | null {
+	const band = sideBand(shape);
+	if (!band) return null;
+	const { x, width } = band.frame;
+	const camera = shape.occlusions.find((o) => o.width < width && o.x >= x && o.x + o.width <= x + width);
+	if (camera) return camera.x + camera.width / 2;
+	return x + width / 2 + (band.edge === 'trailing' ? -STATUS_COLUMN_SHIFT : STATUS_COLUMN_SHIFT);
+}
+
+// `center` is where the pill centres, under the status column. On the phone-sized outer
+// display the pill sits at the band's foot, in thumb reach; on the inner display just below
+// the status bar.
+export type Toolbar = { frame: Rect; center: number; align: 'top' | 'bottom' };
 
 // The floating navigation pill's slot: down the side band below the status bar, where
 // Apple places vertical bars (landscape, the outer display). Portrait keeps Discord's own
 // floating bar at the bottom, as Apple keeps bars horizontal on the inner display there.
 export function toolbar(shape: Shape): Toolbar | null {
 	const rail = railFrame(shape);
-	return rail ? { frame: { x: rail.x, y: rail.y, width: rail.width, height: rail.height } } : null;
+	if (!rail) return null;
+	return {
+		frame: { x: rail.x, y: rail.y, width: rail.width, height: rail.height },
+		center: statusColumnCenter(shape) ?? rail.x + rail.width / 2,
+		align: shape.regularWidth ? 'top' : 'bottom',
+	};
 }
 
 // In a portrait top band, headers share the row with the status bar, as native iPhone
@@ -85,6 +107,24 @@ export function headerRow(shape: Shape): HeaderRow | null {
 	if (blocking.some((o) => o.x < shape.window.width / 2)) return null;
 	const trailing = blocking.reduce((most, o) => Math.max(most, shape.window.width - o.x + HEADER_GAP), 0);
 	return { top: HEADER_ROW_TOP, trailing };
+}
+
+// On the phone-sized outer display the side band carries content, as native apps run it
+// under the status column: chats span the full width while the tabs keep their inset.
+export function fillBand(shape: Shape): Band | null {
+	const band = sideBand(shape);
+	return band && !shape.regularWidth && band.edge === 'trailing' ? band : null;
+}
+
+// Where a full-width header goes: on the status bar's row in a top band, or in place beside
+// a filled side band with its trailing buttons clear of the band. `top` null keeps it in place.
+export type HeaderPlacement = { top: number | null; trailing: number };
+
+export function headerPlacement(shape: Shape): HeaderPlacement | null {
+	const row = headerRow(shape);
+	if (row) return row;
+	const band = fillBand(shape);
+	return band ? { top: null, trailing: band.frame.width + HEADER_GAP } : null;
 }
 
 // How far a leading column may rise to that header row: allowed only when nothing the

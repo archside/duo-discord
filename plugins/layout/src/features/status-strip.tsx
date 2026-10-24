@@ -3,10 +3,11 @@ import React from 'react';
 import { comfortableTop, toolbar } from '../../../../src/shared/posture.ts';
 import { findLoaded, whenAllLoaded } from '../../../../src/shared/when-loaded.ts';
 import { onStatusRow } from '../components/channel-header.tsx';
-import { ColumnLift, StatusStrip, YouBarGate } from '../components/status-strip.tsx';
+import { bandFilled, ColumnLift, StatusStrip, TabsInset, YouBarGate } from '../components/status-strip.tsx';
 import { enabled, type Cleanup } from '../lifecycle.ts';
-import { paths, Patcher, sensor, settings } from '../modules.ts';
+import { paths, Patcher, sensor, settings, tabsInset } from '../modules.ts';
 import { outline, wrapChannelHeader } from '../patches/channel-header.tsx';
+import { rewrite } from '../patches/tree.ts';
 import { refreshLayout } from '../patches/dimensions-store.ts';
 
 type Insets = { top: number; right: number; bottom: number; left: number };
@@ -23,6 +24,7 @@ const pillShown = () => {
 // flipping one updates in place without touching Discord's tree.
 export function applyStatusStrip(): Cleanup {
 	const removeHeader = applyChannelHeaderRow();
+	const removeTabsInset = applyTabsInset();
 	const removeStrip = whenAllLoaded(
 		[paths.mainTabs, paths.youBar, paths.youBarTotalHeight, paths.safeAreaInsets, paths.guilds],
 		([mainTabs, youBar, youBarHeight, safeArea, guilds]) => {
@@ -36,7 +38,9 @@ export function applyStatusStrip(): Cleanup {
 						// Discord's children keep their positions, so React keeps them mounted.
 						const children = result.props.children;
 						const own = <StatusStrip key='duo-status-strip' />;
-						return Array.isArray(children) ? React.cloneElement(result, {}, ...children, own) : React.cloneElement(result, {}, children, own);
+						// Chats fill the side band only once the tabs can take over the margin.
+						const props = bandFilled() ? { style: [result.props.style, { marginRight: 0 }] } : {};
+						return Array.isArray(children) ? React.cloneElement(result, props, ...children, own) : React.cloneElement(result, props, children, own);
 					}),
 				);
 			} else shapeChanged('MainTabs');
@@ -87,7 +91,42 @@ export function applyStatusStrip(): Cleanup {
 	return () => {
 		removeStrip();
 		removeHeader();
+		removeTabsInset();
 	};
+}
+
+// Discord's tabs navigator inside the navigator panel, beside the chat panels. It takes over
+// MainTabs' trailing margin while chats fill the side band; found by identity, or the margin
+// returns to MainTabs.
+function applyTabsInset(): Cleanup {
+	return whenAllLoaded([paths.mainTabsPanel, paths.youBarStack], ([panel, stack]) => {
+		const Tabs = stack?.default;
+		if (typeof panel?.default?.type !== 'function' || !Tabs) {
+			console.warn('[DuoLayout] tabs navigator changed shape; the side band keeps its margin.');
+			return () => {};
+		}
+		const wrapped = new WeakMap<object, unknown>();
+		const unpatch = Patcher.after(panel.default, 'type', ({ result }) => {
+			if (!result || typeof result !== 'object') return result;
+			if (!wrapped.has(result)) {
+				const tree = rewrite(result, 8, (el) => (el.type === Tabs ? <TabsInset key='duo-tabs-inset'>{el as React.ReactNode}</TabsInset> : undefined));
+				if (tree === result && tabsInset.state === 'on') {
+					tabsInset.state = 'missing';
+					console.warn(`[DuoLayout] tabs navigator not found in the navigator panel; the side band keeps its margin: ${JSON.stringify(outline(result)).slice(0, 500)}`);
+					queueMicrotask(refreshLayout);
+				}
+				wrapped.set(result, tree);
+			}
+			return wrapped.get(result);
+		});
+		tabsInset.state = 'on';
+		refreshLayout();
+		return () => {
+			unpatch();
+			tabsInset.state = 'off';
+			refreshLayout();
+		};
+	});
 }
 
 // The channel screen loads when a conversation first opens, so it is patched on its own.

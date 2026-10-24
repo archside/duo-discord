@@ -2,10 +2,10 @@ import React from 'react';
 import { Image, Pressable, View } from 'react-native';
 import { assets, metro } from '@unbound-app/api';
 
-import { columnLift, headerRow, sideBand, toolbar } from '../../../../src/shared/posture.ts';
-import { findLoaded } from '../../../../src/shared/when-loaded.ts';
-import { paths, SelectedGuildStore, sensor, settings, theme, UserStore } from '../modules.ts';
-import { activeTab, openYou, subscribeNavigation, toggleMessages } from '../navigation.ts';
+import { columnLift, fillBand, headerRow, sideBand, toolbar } from '../../../../src/shared/posture.ts';
+import { findComponent, findLoaded } from '../../../../src/shared/when-loaded.ts';
+import { paths, SelectedGuildStore, sensor, settings, tabsInset, theme, UserStore } from '../modules.ts';
+import { activeTab, chatOpen, openYou, subscribeNavigation, toggleMessages } from '../navigation.ts';
 import { report } from '../report.ts';
 import { chatHeaderFrames } from './chat-header-frames.ts';
 
@@ -13,7 +13,7 @@ type Insets = { top: number; right: number; bottom: number; left: number };
 type Styles = Record<string, object>;
 
 const PILL_WIDTH = 56;
-// Space between the status bar and the pill below it.
+// Space between the pill and the status bar or the band's foot.
 const PILL_GAP = 12;
 
 let useStyles: (() => Styles) | undefined;
@@ -24,7 +24,7 @@ function styles(): Styles {
 		chat: { position: 'absolute', bottom: 0, backgroundColor: colors.STANDALONE_CHANNEL_CONTENT_BACKGROUND },
 		behindStatus: { position: 'absolute', top: 0, backgroundColor: colors.STANDALONE_CHANNEL_CONTENT_BACKGROUND },
 		divider: { position: 'absolute', height: 1, backgroundColor: colors.STANDALONE_CHANNEL_HEADER_BORDER },
-		slot: { position: 'absolute', alignItems: 'center', paddingTop: PILL_GAP },
+		column: { position: 'absolute', alignItems: 'center', paddingVertical: PILL_GAP },
 		pill: {
 			width: PILL_WIDTH,
 			alignItems: 'center',
@@ -50,6 +50,19 @@ function styles(): Styles {
 }
 
 export const useView = () => React.useSyncExternalStore(sensor.current.subscribe, sensor.current.get);
+
+// Whether content runs into the side band (the outer display): only while the tabs can take
+// over MainTabs' margin. Read where hooks are not allowed.
+export function bandFilled(): boolean {
+	const shape = sensor.current.get().shape;
+	return tabsInset.state === 'on' && settings.get('band', true) === true && Boolean(shape && fillBand(shape));
+}
+
+function useBandFilled(): boolean {
+	const view = useView();
+	const store = settings.useSettingsStore();
+	return Boolean(tabsInset.state === 'on' && store.get('band', true) && view.shape && fillBand(view.shape));
+}
 
 // Discord re-renders flux consumers through this hook; read once per render.
 function useInMessages(): boolean {
@@ -82,21 +95,33 @@ function YouButton({ s }: { s: Styles }) {
 	);
 }
 
-// The YouBar's destinations as a floating pill in the side band, just below the status bar:
-// messages, Discord's own notifications button (with its badge), and you.
-function NavigationPill({ insets, s }: { insets: Insets; s: Styles }) {
+// The side band below the status bar, as one column. The YouBar's destinations float in it
+// as a pill centred under the status icons: at the band's foot on the outer display, in
+// thumb reach, and just below the status bar on the inner display: messages, Discord's own
+// notifications button (with its badge), and you. `originX` is where MainTabs' root starts in the window (its leading margin), so the column
+// lands on the band whichever side the system puts it.
+function SideBandColumn({ originX, s, pill }: { originX: number; s: Styles; pill: boolean }) {
 	const view = useView();
-	const slot = view.shape ? toolbar(view.shape)?.frame : null;
-	const Notifications = findLoaded(paths.notificationsButton)?.default;
-	if (!slot) return null;
+	const filled = useBandFilled();
+	// Inside a chat that fills the band, the pill steps aside, as iOS hides tab bars in pushed screens.
+	const inChat = React.useSyncExternalStore(subscribeNavigation, chatOpen);
+	const bar = view.shape ? toolbar(view.shape) : null;
+	const Notifications = findComponent(paths.notificationsButton)?.default;
+	if (!bar) return null;
+	const slot = bar.frame;
 
 	return (
-		<View style={[s.slot, { right: -insets.right, top: slot.y, width: slot.width, height: slot.height }]} pointerEvents='box-none'>
-			<View accessibilityRole='tablist' style={s.pill}>
-				<MessagesButton s={s} />
-				{Notifications ? <Notifications hasNameplate={false} /> : null}
-				<YouButton s={s} />
-			</View>
+		<View
+			style={[s.column, { left: slot.x - originX, top: slot.y, width: slot.width, height: slot.height, justifyContent: bar.align === 'bottom' ? 'flex-end' : 'flex-start' }]}
+			pointerEvents='box-none'
+		>
+			{pill && !(filled && inChat) ? (
+				<View accessibilityRole='tablist' style={[s.pill, { transform: [{ translateX: bar.center - (slot.x + slot.width / 2) }] }]}>
+					<MessagesButton s={s} />
+					{Notifications ? <Notifications hasNameplate={false} /> : null}
+					<YouButton s={s} />
+				</View>
+			) : null}
 		</View>
 	);
 }
@@ -151,14 +176,16 @@ export function StatusStrip() {
 	const insets = (findLoaded(paths.safeAreaInsets)?.default?.() ?? { top: 0, right: 0, bottom: 0, left: 0 }) as Insets;
 	const s = styles();
 	const fill = store.get('band', true);
+	// Filled, MainTabs gives up its trailing margin and the chat runs under the band instead.
+	const filled = useBandFilled();
 
 	return (
 		<>
-			{fill && insets.right > 0 ? <View pointerEvents='none' style={[s.band, { right: -insets.right, width: insets.right }]} /> : null}
+			{fill && insets.right > 0 && !filled ? <View pointerEvents='none' style={[s.band, { right: -insets.right, width: insets.right }]} /> : null}
 			{fill && insets.right > 0 ? <ChatRunoff insets={insets} s={s} /> : null}
 			{fill ? <BehindStatus s={s} /> : null}
 			{fill && insets.left > 0 ? <View pointerEvents='none' style={[s.band, { left: -insets.left, width: insets.left }]} /> : null}
-			{store.get('rail', true) ? <NavigationPill insets={insets} s={s} /> : null}
+			<SideBandColumn originX={insets.left} s={s} pill={store.get('rail', true)} />
 		</>
 	);
 }
@@ -169,6 +196,16 @@ export function YouBarGate({ children }: { children: React.ReactNode }) {
 	const store = settings.useSettingsStore();
 	const replaced = store.get('rail', true) && Boolean(view.shape && toolbar(view.shape));
 	return replaced ? null : <>{children}</>;
+}
+
+// Wraps Discord's tabs (servers, notifications, messages). While a chat fills the side band
+// the tabs keep their inset here, so their headers and buttons stay clear of the status
+// column and the pill. One View either way, so folding never remounts the tabs.
+export function TabsInset({ children }: { children: React.ReactNode }) {
+	const view = useView();
+	const filled = useBandFilled();
+	const inset = filled && view.shape ? (fillBand(view.shape)?.frame.width ?? 0) : 0;
+	return <View style={{ flex: 1, marginRight: inset }}>{children}</View>;
 }
 
 // Wraps Discord's server-list column. In portrait, with chat beside it and nothing of the

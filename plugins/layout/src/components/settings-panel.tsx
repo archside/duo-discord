@@ -6,8 +6,8 @@ import { settings } from '../modules.ts';
 
 const switches: { key: string; label: string; detail: string }[] = [
 	{ key: 'continuity', label: 'Keep conversation when folding', detail: 'Folding mid-conversation keeps that conversation open on the outer display.' },
-	{ key: 'band', label: 'Use the status bar band', detail: "In portrait, server list and chat headers share the status bar's row. In landscape, the chat carries on into the side band. Content keeps a comfortable top edge." },
-	{ key: 'rail', label: 'Floating navigation', detail: 'In landscape and on the outer display, messages, notifications and You float just below the status bar instead of in the bottom bar.' },
+	{ key: 'band', label: 'Use the status bar band', detail: "In portrait, server list and chat headers share the status bar's row. In landscape, the chat carries on into the side band. On the outer display, chats run under the side band. Content keeps a comfortable top edge." },
+	{ key: 'rail', label: 'Floating navigation', detail: 'In landscape, messages, notifications and You float just below the status bar instead of in the bottom bar. On the outer display, they float at the foot of the side band.' },
 	{ key: 'book', label: 'Split at the fold', detail: 'Half-folded like a book, channels fill one half and the chat the other.' },
 	{ key: 'tabletop', label: 'Tabletop calls', detail: 'Half-folded like a laptop during a call, video sits above the fold and controls below.' },
 ];

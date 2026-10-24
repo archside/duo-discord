@@ -31,7 +31,26 @@ function world({ width = 951, fontScale = 1, shape = true, insets = { top: 0, le
 	const mainTabsChild = { type: 'ThemeProvider', props: {} };
 	const mainTabs = { default: { type: () => element('View', { style: [{ flex: 1 }, { marginLeft: 0, marginRight: 84 }] }, mainTabsChild) } };
 	const youBar = { default: { type: () => element('YouBar', {}) } };
-	const guilds = { default: { type: () => element('GuildsPanel', {}) } };
+	// Inside MainTabs, Discord's navigator panel holds the tabs navigator and, beside it, the chat panels.
+	const youBarStack = { default: { $$typeof: 'react.memo', type: () => element('Tabs', {}) } };
+	const mainTabsPanel = {
+		default: {
+			type: () =>
+				element(
+					'Provider',
+					{},
+					element(
+						'GestureDetector',
+						{},
+						element('View', { style: [{ flex: 1 }] }, element('Animated.View', { importantForAccessibility: 'no-hide-descendants' }, element(youBarStack.default, {})), element('MainTabsChannelScreenStack', { screens: [] })),
+					),
+				),
+		},
+	};
+	// Discord's server tab: the channel panel (rail and list), the YouBar and the quest banner as siblings.
+	const guilds = {
+		default: { type: () => element('QuestDockProvider', {}, element('MainChannels', {}), element('YouBar', {}), element('QuestDock', {})) },
+	};
 	// Discord's channel screen, shaped as on device: its header is a component private to the
 	// screen's module that reads the safe-area top itself, and returns a fragment whose root
 	// pairs that top (padding, or margin beside the channel list) with a minimum height.
@@ -83,6 +102,23 @@ function world({ width = 951, fontScale = 1, shape = true, insets = { top: 0, le
 		getCurrentNavigationRouteName: () => 'guilds',
 		useCurrentNavigationRouteName: () => 'guilds',
 	};
+	// Discord's orientation lock: iPhones get a default portrait lock at launch; restoring the
+	// default after a screen's own lock goes through a module-internal call.
+	const deviceOrientation = {
+		lock: 'PORTRAIT',
+		lockOrientationForiOS(lock) {
+			this.lock = lock === 'LANDSCAPE' ? 'LANDSCAPE' : 'PORTRAIT';
+		},
+		unlockOrientation() {
+			this.lock = null;
+		},
+		getOrientationLock() {
+			return this.lock;
+		},
+		restoreDefaultOrientation() {
+			this.lock = 'PORTRAIT';
+		},
+	};
 	class VoiceCardLayout {
 		updateState(items, metrics) {
 			this.metrics = metrics;
@@ -90,6 +126,8 @@ function world({ width = 951, fontScale = 1, shape = true, insets = { top: 0, le
 	}
 	const modules = {
 		'modules/main_tabs_v2/native/MainTabs.tsx': mainTabs,
+		'modules/main_tabs_v2/native/panels/MainTabsNavigatorPanel.tsx': mainTabsPanel,
+		'modules/main_tabs_v2/native/you_bar/YouBarStackNavigator.tsx': youBarStack,
 		'modules/main_tabs_v2/native/tabs/guilds/Guilds.tsx': guilds,
 		'modules/main_tabs_v2/native/channel/StandaloneChannelScreen.tsx': channelScreen,
 		'modules/main_tabs_v2/native/you_bar/YouBar.tsx': youBar,
@@ -101,6 +139,7 @@ function world({ width = 951, fontScale = 1, shape = true, insets = { top: 0, le
 		'modules/main_tabs_v2/helpers/NavigationRouteUtils.native.tsx': navigationRouteUtils,
 		'modules/safe_area/useSafeAreaInsets.native.tsx': safeArea,
 		'modules/voice_panel/native/card/VoicePanelCardLayoutManager.tsx': { default: VoiceCardLayout },
+		'modules/device/native/DeviceOrientation.tsx': deviceOrientation,
 		'modules/screen/native/useWindowSizeClassifier.tsx': classifier,
 		'modules/screen/native/useBaseAppContainerDimensions.tsx': base,
 		'modules/screen/native/drawer/useDrawerWidth.tsx': drawer,
@@ -113,6 +152,7 @@ function world({ width = 951, fontScale = 1, shape = true, insets = { top: 0, le
 		const original = parent[method];
 		const record = { parent, method, original };
 		parent[method] = function (...args) {
+			if (kind === 'instead') return cb({ args, this: this, original: (...a) => original.apply(this, a) });
 			if (kind === 'before') {
 				cb({ args, this: this });
 				return original.apply(this, args);
@@ -175,6 +215,11 @@ function world({ width = 951, fontScale = 1, shape = true, insets = { top: 0, le
 			useRef: (current) => ({ current }),
 			useEffect: () => {},
 			useCallback: (fn) => fn,
+			Component: class {
+				constructor(props) {
+					this.props = props;
+				}
+			},
 			useState: (v) => [v, () => {}],
 			useSyncExternalStore: (_, get) => get(),
 			Fragment: 'Fragment',
@@ -195,7 +240,7 @@ function world({ width = 951, fontScale = 1, shape = true, insets = { top: 0, le
 			ScrollView: 'ScrollView',
 			Text: 'Text',
 		},
-		unbound: { assets: { getIDByName: () => 1 }, metro, patcher: { createPatcher: () => ({ before: (...a) => patch('before', ...a), after: (...a) => patch('after', ...a) }) }, storage },
+		unbound: { assets: { getIDByName: () => 1 }, metro, patcher: { createPatcher: () => ({ before: (...a) => patch('before', ...a), after: (...a) => patch('after', ...a), instead: (...a) => patch('instead', ...a) }) }, storage },
 	};
 	const console = { log: (m) => logs.push(m), warn: (m) => logs.push(`WARN ${m}`), error: (m) => logs.push(`ERROR ${m}`) };
 	const load = (folder) => new Function('window', 'console', `return ${readFileSync(resolve(root, 'dist', folder, 'index.js'), 'utf8')}`)(window, console);
@@ -205,7 +250,7 @@ function world({ width = 951, fontScale = 1, shape = true, insets = { top: 0, le
 	};
 	const live = () => Object.values(listeners).reduce((n, set) => n + set.size, 0);
 	const settle = (ms = 400) => new Promise((r) => setTimeout(r, ms));
-	return { env, classifier, chat, dimensionsStore, patches, logs, load, flush, settle, live, storage, listeners, drawer, mainTabs, mainTabsChild, youBar, youBarHeight, guilds, safeArea, channelScreen, nav, VoiceCardLayout };
+	return { env, classifier, chat, dimensionsStore, patches, logs, load, flush, settle, live, storage, listeners, drawer, mainTabs, mainTabsChild, youBar, youBarHeight, guilds, safeArea, channelScreen, nav, VoiceCardLayout, modules, deviceOrientation, mainTabsPanel, youBarStack };
 }
 
 function fakeNative() {
@@ -258,6 +303,9 @@ function fakeNative() {
 const poses = {
 	landscape: { window: { width: 951, height: 669 }, safe: { top: 0, left: 0, bottom: 34, right: 84 }, sizeClass: 2, occlusion: { x: 867, y: 0, width: 84, height: 124 }, fold: { x: 455.5, y: 0, width: 40, height: 669 } },
 	portrait: { window: { width: 669, height: 951 }, safe: { top: 82, left: 0, bottom: 34, right: 0 }, sizeClass: 2, occlusion: { x: 525, y: 0, width: 144, height: 82 }, fold: { x: 0, y: 455.5, width: 669, height: 40 } },
+	outer: { window: { width: 466, height: 678 }, safe: { top: 0, left: 0, bottom: 34, right: 84 }, sizeClass: 1, occlusion: { x: 382, y: 0, width: 84, height: 174 }, fold: null },
+	// Folded and held sideways: the status column moves to the leading edge (measured window and insets).
+	outerLandscape: { window: { width: 678, height: 466 }, safe: { top: 0, left: 84, bottom: 34, right: 0 }, sizeClass: 1, occlusion: { x: 0, y: 0, width: 84, height: 174 }, fold: null },
 };
 
 // The layout plugin's native side: the bridge as measured on device, plus hooks.
@@ -268,7 +316,7 @@ function duoNative(pose, { folded = false } = {}) {
 	const state = { pose, folded };
 	const hooks = new Set();
 	const regions = () => ({
-		division: [{ frame: rect(state.pose.fold), active: state.folded }],
+		division: state.pose.fold ? [{ frame: rect(state.pose.fold), active: state.folded }] : [],
 		occlusion: [{ frame: rect(state.pose.occlusion), active: true }],
 	});
 	const answers = () => ({
@@ -347,6 +395,7 @@ check("layout 0.2: status strip is appended after Discord's own MainTabs child a
 	assert.ok(Array.isArray(patched.props.children), 'children became a list');
 	assert.equal(patched.props.children[0], w.mainTabsChild, "Discord's child stays first");
 	assert.equal(patched.props.children[1].key, 'duo-status-strip');
+	assert.deepEqual(patched.props.style, [{ flex: 1 }, { marginLeft: 0, marginRight: 84 }], 'inner display keeps the side margin');
 	plugin.stop();
 	assert.equal(w.mainTabs.default.type().props.children, w.mainTabsChild);
 });
@@ -403,7 +452,7 @@ check('layout 0.3: portrait keeps the YouBar and lifts the server list into the 
 	assert.equal(channelHeader(w).root.props.style.length, 6, 'band switch off keeps the stock header');
 	main.pop();
 	plugin.stop();
-	assert.equal(w.guilds.default.type().type, 'GuildsPanel');
+	assert.equal(w.guilds.default.type().type, 'QuestDockProvider');
 	assert.equal(w.channelScreen.default.type().props.children.props.children[0].props.channelId, '2594');
 	assert.equal(w.channelScreen.default.type().props.children.props.children[0].type.name, 'Header', 'stock header back after stop');
 });
@@ -418,6 +467,12 @@ check('layout 0.3: landscape keeps a comfortable top edge and the server list in
 	assert.equal(w.safeArea.default(), w.safeArea.default(), 'same object while the numbers are unchanged');
 	const lift = w.guilds.default.type();
 	assert.equal(lift.type(lift.props).props.style.marginTop, -0);
+	const sideColumn = statusStrip(w).at(-1);
+	const landscapeColumn = sideColumn.type(sideColumn.props);
+	const landscapePill = landscapeColumn.props.children;
+	assert.ok(landscapePill.props.children[0], 'pill keeps its messages button');
+	assert.equal(landscapeColumn.props.style.at(-1).justifyContent, 'flex-start', 'inner display: just below the status bar');
+	assert.deepEqual(landscapePill.props.style.at(-1), { transform: [{ translateX: -6 }] }, 'centred under the status icons, 6 pt inside the band');
 	const { root, measurer } = channelHeader(w, { frame: { type: 'FadingFrame', props: {} } });
 	assert.equal(root.props.style.length, 6, 'landscape header keeps its place');
 	assert.equal(statusStrip(w)[1].type(statusStrip(w)[1].props), null, 'no runoff before the header has measured itself');
@@ -433,6 +488,121 @@ check('layout 0.3: landscape keeps a comfortable top edge and the server list in
 	assert.equal(w.safeArea.default().top, 0, 'band switch off restores the stock inset');
 	plugin.stop();
 	assert.equal(w.patches.size, 0);
+});
+
+check('layout 0.5: folded, the pill sits at the foot of the band, centred under the status icons', async () => {
+	const w = world({ width: 466, insets: poses.outer.safe });
+	const plugin = w.load('layout');
+	plugin.start(duoNative(poses.outer).context);
+	await w.flush();
+	await w.settle();
+	const column = statusStrip(w).at(-1);
+	const folded = column.type(column.props);
+	const pill = folded.props.children;
+	assert.ok(pill.props.children[0], 'pill keeps its messages button');
+	assert.equal(folded.props.style.at(-1).justifyContent, 'flex-end', 'outer display: the pill sits at the foot of the band, in thumb reach');
+	assert.equal(Math.round(pill.props.style.at(-1).transform[0].translateX), -6, 'centred under the camera and status icons');
+	plugin.stop();
+	assert.equal(w.patches.size, 0);
+});
+
+check("layout 0.4.3: on a foldable, Discord's default portrait lock is released and stays released", async () => {
+	const w = world();
+	const o = w.deviceOrientation;
+	const plugin = w.load('layout');
+	plugin.start(duoNative(poses.landscape).context);
+	await w.flush();
+	await w.settle();
+	assert.equal(o.getOrientationLock(), null, 'released once the window shows a foldable');
+	assert.equal(w.storage.getStore('duo.layout').get('foldable'), true, 'remembered for folded launches');
+	o.lockOrientationForiOS();
+	assert.equal(o.getOrientationLock(), null, 'the default lock is skipped');
+	o.lockOrientationForiOS('LANDSCAPE');
+	assert.equal(o.getOrientationLock(), 'LANDSCAPE', "a lock a Discord screen asks for still applies");
+	o.unlockOrientation();
+	o.restoreDefaultOrientation();
+	assert.equal(o.getOrientationLock(), null, 'released again after Discord restores its default');
+	plugin.stop();
+	assert.equal(o.getOrientationLock(), 'PORTRAIT', 'stop gives Discord its stock lock back');
+	assert.equal(w.patches.size, 0);
+});
+
+check("layout 0.4.3: a phone that never shows a foldable window keeps Discord's portrait lock", async () => {
+	const w = world({ width: 393 });
+	const plugin = w.load('layout');
+	plugin.start();
+	await w.flush();
+	await w.settle();
+	assert.equal(w.deviceOrientation.getOrientationLock(), 'PORTRAIT');
+	w.deviceOrientation.lockOrientationForiOS();
+	assert.equal(w.deviceOrientation.getOrientationLock(), 'PORTRAIT', 'default lock still applies');
+	plugin.stop();
+});
+
+check('layout 0.4.3: launched folded on a known foldable, the lock is released at once', async () => {
+	const w = world({ width: 466, insets: poses.outer.safe });
+	w.storage.getStore('duo.layout').set('foldable', true);
+	const plugin = w.load('layout');
+	plugin.start(duoNative(poses.outer).context);
+	await w.flush();
+	assert.equal(w.deviceOrientation.getOrientationLock(), null);
+	plugin.stop();
+});
+
+// The tabs inset inside the patched navigator panel: Provider > GestureDetector > View > [tabs container, chat panels].
+const tabsInset = (w) => w.mainTabsPanel.default.type().props.children.props.children.props.children[0].props.children;
+
+check('layout 0.5 prototype: folded, chats fill the side band while the tabs keep their inset', async () => {
+	const w = world({ width: 466, insets: poses.outer.safe });
+	const plugin = w.load('layout');
+	plugin.start(duoNative(poses.outer).context);
+	await w.flush();
+	await w.settle();
+	assert.deepEqual(w.mainTabs.default.type().props.style.at(-1), { marginRight: 0 }, 'MainTabs gives up its trailing margin');
+	const inset = tabsInset(w);
+	assert.equal(inset.key, 'duo-tabs-inset');
+	assert.equal(inset.props.children.type, w.youBarStack.default, "wraps Discord's tabs navigator itself");
+	assert.equal(inset.type(inset.props).props.style.marginRight, 84, 'the tabs keep the inset');
+	const strip = statusStrip(w);
+	assert.equal(strip[0], null, 'no band backdrop over the chat');
+	const column = strip.at(-1).type(strip.at(-1).props);
+	assert.equal(column.props.style.at(-1).left, 382, 'band column on the band, from the screen edge');
+	assert.ok(column.props.children, 'pill shown over the tabs');
+	w.nav.state.routes[0].state.routes.push({ name: 'channel', params: { channelId: '2594' } });
+	const inChat = statusStrip(w).at(-1);
+	assert.equal(inChat.type(inChat.props).props.children, null, 'pill steps aside inside a chat');
+	const header = channelHeader(w);
+	assert.deepEqual(header.root.props.style.at(-1), { paddingRight: 92 }, 'chat header in place, its buttons clear of the band');
+	assert.equal(channelHeader(w, { frame: { type: 'ChannelScreenAnimatedFrame', props: {} } }).frame.props.style.at(-1), false, "Discord's status-bar bar left alone");
+	plugin.stop();
+	assert.equal(w.patches.size, 0);
+	assert.deepEqual(w.mainTabs.default.type().props.style, [{ flex: 1 }, { marginLeft: 0, marginRight: 84 }]);
+});
+
+check('layout 0.5: folded and sideways, the pill sits in the leading band and nothing fills it', async () => {
+	const w = world({ width: 678, insets: poses.outerLandscape.safe });
+	const plugin = w.load('layout');
+	plugin.start(duoNative(poses.outerLandscape).context);
+	await w.flush();
+	await w.settle();
+	assert.equal(w.mainTabs.default.type().props.style.length, 2, 'MainTabs keeps its margins');
+	const column = statusStrip(w).at(-1).type(statusStrip(w).at(-1).props);
+	assert.equal(column.props.style.at(-1).left, -84, 'in the leading band, left of MainTabs');
+	assert.ok(column.props.children, 'pill shown');
+	assert.equal(tabsInset(w).type(tabsInset(w).props).props.style.marginRight, 0, 'tabs not inset');
+	plugin.stop();
+});
+
+check('layout 0.5 prototype: without the tabs navigator, the side band keeps its margin', async () => {
+	const w = world({ width: 466, insets: poses.outer.safe });
+	delete w.modules['modules/main_tabs_v2/native/you_bar/YouBarStackNavigator.tsx'];
+	const plugin = w.load('layout');
+	plugin.start(duoNative(poses.outer).context);
+	await w.flush();
+	await w.settle();
+	assert.equal(w.mainTabs.default.type().props.style.length, 2, 'MainTabs keeps its margin');
+	assert.ok(statusStrip(w)[0], 'band backdrop stays');
+	plugin.stop();
 });
 
 check('layout 0.2: half-folded like a book, the tiled sidebar ends at the far edge of the fold', async () => {

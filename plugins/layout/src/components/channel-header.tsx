@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { headerRow } from '../../../../src/shared/posture.ts';
+import { headerPlacement } from '../../../../src/shared/posture.ts';
 import { settings } from '../modules.ts';
 import { report } from '../report.ts';
 import { editChannelHeader, outline, type Component } from '../patches/channel-header.tsx';
@@ -36,10 +36,10 @@ export function onStatusRow(Header: Component): Component {
 		const band = settings.useSettingsStore().get('band', true);
 		const measurer = useMeasurer();
 		const tree = Header(props);
-		const row = band && view.shape ? headerRow(view.shape) : null;
-		const edited = editChannelHeader(tree, row, measurer, props.frame);
+		const placement = band && view.shape ? headerPlacement(view.shape) : null;
+		const edited = editChannelHeader(tree, placement, measurer, props.frame);
 		if (edited === tree) report(`channel header signature not found: ${JSON.stringify(outline(tree)).slice(0, 700)}`);
-		else if (row) report(`channel header on the status row (top ${row.top}, clear ${row.trailing})`);
+		else if (placement) report(`channel header placed (top ${placement.top ?? 'in place'}, clear ${placement.trailing})`);
 		return edited;
 	};
 	wrappers.set(Header, Wrapped);

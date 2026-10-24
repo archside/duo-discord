@@ -33,6 +33,9 @@ export function activeTab(): string | null {
 	return main?.name === 'tabs' ? (active(main)?.name ?? null) : null;
 }
 
+// Measured: an open chat is a pushed 'channel' route on the main stack.
+export const chatOpen = (): boolean => mainScreen()?.name === 'channel';
+
 // The conversation the active server list holds when no chat screen is pushed above it.
 // Measured: folding from columns leaves exactly this state, and the tabs stack can hold
 // several server lists (Discord's YouBar pushes screens), so only the active one counts.

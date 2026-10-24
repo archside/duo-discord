@@ -4,6 +4,7 @@ import type { PluginContext } from '@unbound-app/api/native';
 import { SettingsPanel } from './components/settings-panel.tsx';
 import { applyColumns } from './features/columns.ts';
 import { keepConversationOnFold } from './features/continuity.ts';
+import { releasePortraitLock } from './features/orientation.ts';
 import { splitAtFold, tabletopCalls } from './features/postures.ts';
 import { applyStatusStrip } from './features/status-strip.tsx';
 import { applyAll, whileSetting } from './lifecycle.ts';
@@ -24,6 +25,7 @@ function start(context?: PluginContext) {
 		() => sensor.current.dispose,
 		() => sensor.current.subscribe(() => refreshLayout()),
 		applyColumns,
+		releasePortraitLock,
 		() => whileSetting('continuity', true, keepConversationOnFold),
 		applyStatusStrip,
 		() => whileSetting('book', true, splitAtFold),

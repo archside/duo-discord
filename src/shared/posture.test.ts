@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { bookSidebarWidth, columnLift, comfortableTop, headerRow, posture, railFrame, sideBand, tabletopMediaHeight, toolbar, type Shape } from './posture.ts';
+import { bookSidebarWidth, columnLift, comfortableTop, fillBand, headerPlacement, headerRow, posture, railFrame, sideBand, statusColumnCenter, tabletopMediaHeight, toolbar, type Shape } from './posture.ts';
 
 // Shapes measured on the iPhone Duo (see measurements/), used as fixtures only.
 const landscape = (foldActive: boolean): Shape => ({
@@ -22,7 +22,11 @@ const outer: Shape = {
 	window: { width: 466, height: 678 },
 	safeArea: { top: 0, left: 0, bottom: 34, right: 84 },
 	regularWidth: false,
-	occlusions: [],
+	// Status block and front camera, as measured folded.
+	occlusions: [
+		{ x: 382, y: 0, width: 84, height: 174 },
+		{ x: 399.67, y: 29.33, width: 37, height: 37 },
+	],
 	folds: [],
 };
 
@@ -48,7 +52,7 @@ test('the side band is the wide side inset; a top band is not a side band', () =
 
 test('the rail starts below the system controls and stops above the bottom inset', () => {
 	assert.deepEqual(railFrame(landscape(false)), { edge: 'trailing', x: 867, y: 124, width: 84, height: 511 });
-	assert.deepEqual(railFrame(outer), { edge: 'trailing', x: 382, y: 0, width: 84, height: 644 });
+	assert.deepEqual(railFrame(outer), { edge: 'trailing', x: 382, y: 174, width: 84, height: 470 });
 	assert.equal(railFrame(portrait(false)), null);
 });
 
@@ -58,7 +62,7 @@ test('no rail when the band is too short for its buttons', () => {
 });
 
 test('the floating toolbar lives in the side band, never in a top band', () => {
-	assert.deepEqual(toolbar(landscape(false)), { frame: { x: 867, y: 124, width: 84, height: 511 } });
+	assert.deepEqual(toolbar(landscape(false)), { frame: { x: 867, y: 124, width: 84, height: 511 }, center: 903, align: 'top' });
 	assert.ok(toolbar(outer));
 	assert.equal(toolbar(portrait(false)), null);
 });
@@ -90,4 +94,21 @@ test('in the book posture the sidebar ends at the far edge of the fold', () => {
 test('in tabletop the media area ends at the top of the fold', () => {
 	assert.equal(tabletopMediaHeight(posture(portrait(true)), 200), 455.5);
 	assert.equal(tabletopMediaHeight(posture(landscape(true)), 200), null);
+});
+
+test('the pill centres under the status column: the camera when folded, 6 pt inside the band otherwise', () => {
+	assert.equal(statusColumnCenter(outer), 399.67 + 37 / 2, 'folded: the front camera region');
+	assert.equal(statusColumnCenter(landscape(false)), 903, 'landscape: measured 6 pt toward the content');
+	assert.equal(statusColumnCenter(portrait(false)), null, 'no side band');
+	assert.equal(toolbar(outer)?.align, 'bottom', 'outer display: thumb reach');
+	assert.equal(toolbar(landscape(false))?.align, 'top', 'inner display: below the status bar');
+	assert.equal(toolbar(landscape(false))?.center, 903);
+});
+
+test('the outer display fills its side band; headers keep their buttons clear of it', () => {
+	assert.equal(fillBand(outer)?.frame.width, 84);
+	assert.equal(fillBand(landscape(false)), null, 'inner display keeps the band');
+	assert.deepEqual(headerPlacement(outer), { top: null, trailing: 92 }, 'in place, clear of the band');
+	assert.deepEqual(headerPlacement(portrait(false)), { top: 28, trailing: 152 }, 'portrait: the status row');
+	assert.equal(headerPlacement(landscape(false)), null);
 });

@@ -1,8 +1,18 @@
 # Duo Discord
 
-Two Unbound plugins and one packaging tool for running Discord on iPhone Duo. Everything here builds and passes checks on Windows. None of it has run on a Duo yet.
+Unbound plugins that adapt Discord for iPhone Duo, plus the packaging tool that gives Discord the Duo's full window. Built and checked on Windows, and tested on an iPhone Duo with Discord 350.0 and the Unbound loader, installed through SideStore.
 
-## Feasibility, as of 2026-10-24
+Duo Layout keeps Discord's own screens and adds:
+
+- **Unfolded, portrait.** The server list and chat headers sit on the status bar's row, clear of the status icons, and hold that row while the chat slides between peeking and full width.
+- **Unfolded, landscape.** The chat's surface and header divider carry on into the side band. A pill with messages, notifications and you replaces the bottom bar, just under the status icons.
+- **Folded.** Chats run under the side band. The pill sits at the band's foot, in thumb reach, and steps aside inside chats.
+- **Folding and half-folding.** Folding mid-conversation keeps that conversation open. Half-folded like a book, the channel list ends at the fold; like a laptop during a call, video stays above it. These two postures pass the smoke checks but are not yet checked on the device.
+- **Rotation.** Discord locks iPhones to portrait, which made unfolding open in the wrong orientation. On the Duo the lock is released, as Discord already does on iPad.
+
+Each part has a switch in Duo Layout's settings and falls back to stock Discord when Discord's internals change shape. Duo Probe is a read-only companion that logs window geometry for diagnosis.
+
+## Feasibility, as first assessed on 2026-10-24
 
 The work splits into three problems, and only the first can block it.
 
@@ -30,14 +40,14 @@ Both plugins declare only the two base native capabilities. If a manifest names 
 ## Layout
 
 - `plugins/probe` is Duo Probe. It is read-only. It logs window, screen, safe areas, size classes, fold regions, keyboard frames and Discord's own column decision on every change, plus an allow-list of Info.plist build keys. It reads no messages, accounts or tokens.
-- `plugins/layout` is Duo Layout. It keeps Discord's own screens and adds five switchable parts. Fold continuity keeps a conversation open when you fold mid-conversation. The status bar band puts the server list and chat headers on the status bar's row in portrait, and carries the chat's surface into the side band in landscape. Floating navigation replaces the YouBar with a pill just below the status bar whenever a side band exists. The book split ends the channel list at the fold. Tabletop calls keep video above the fold. Each part checks Discord's module shapes and stays at stock behavior if they change.
+- `plugins/layout` is Duo Layout. It keeps Discord's own screens and adds five switchable parts. Fold continuity keeps a conversation open when you fold mid-conversation. The status bar band puts the server list and chat headers on the status bar's row in portrait, carries the chat's surface into the side band in landscape, and lets chats run under the side band on the outer display. Floating navigation replaces the YouBar with a pill centred under the status icons: just below them on the inner display, at the foot of the band on the outer display, and out of the way inside chats there. On the Duo, Discord's iPhone portrait lock is released, as Discord already does on iPad, so unfolding follows the way the phone is held. The book split ends the channel list at the fold. Tabletop calls keep video above the fold. Each part checks Discord's module shapes and stays at stock behavior if they change.
 - `src/shared` holds the column policy (`columns.ts`) and the posture model (`posture.ts`), both unit tested, plus the geometry store and the UIKit reader.
 - `docs/discord-internals.md` lists every Discord module and UIKit fact Duo Layout depends on, and what was measured on the device.
 - `tools/ipa/duo_ipa.py` inspects an IPA and rewrites the SDK stamp. It never modifies its input.
 - `tools/device.mjs` is a Bun-free stand-in for `ub-debugger`. It streams device logs, runs JavaScript on the phone and hot-pushes plugins.
 - `tools/serve.mjs` serves one folder on the LAN so the phone can download an IPA in Safari.
 - `tools/smoke.mjs` runs the built bundles against stand-ins shaped like the measured device bridge, checking each feature's wiring, lifecycle and cleanup. It is not a device result.
-- `tools/probes/` holds one-shot device readings for `npm run device -- eval --file`. `window.js` reads the window and regions, `clip.js` finds native views that clip the chat, `nav-state.js` prints the route tree with IDs shortened, and `drawer.js` prints the chat layout and the main stack's routes without IDs. `discover.js`, `fold.js`, `internals.js`, `layout-state.js` and `orientation.js` cover module paths, fold signals and rotation.
+- `tools/probes/` holds one-shot device readings for `npm run device -- eval --file`. `window.js` reads the window and regions, `clip.js` finds native views that clip the chat, `nav-state.js` prints the route tree with IDs shortened, and `drawer.js` prints the chat layout and the main stack's routes without IDs. `orientation-lock.js` compares Discord's orientation lock with what UIKit allows. `discover.js`, `fold.js`, `internals.js`, `layout-state.js` and `orientation.js` cover module paths, fold signals and rotation.
 - `measurements/` keeps the device readings each design decision rests on.
 
 ## Build on Windows

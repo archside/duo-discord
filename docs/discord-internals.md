@@ -35,6 +35,19 @@ Discord iOS 350.0, checked against the datamined source (Wumpus-Central/discord-
 - Duo Layout therefore paints the band from MainTabs' root, outside that container, using the header's measured window frame. Measured with 0.3.7: a chat-surface view at x 867, y 21, 84 by 648, and the divider at y 75 in the header border colour. The first render can precede the header's measurement, so the band repaints when the frame arrives.
 - Root navigation state reads `main > tabs > guilds` with the chat pinned beside the list.
 
+## Folded layout (device-checked, outer display)
+
+- The outer display is 466 by 678 with an 84 pt trailing band. Its reserved regions are the status block (382, 0, 84 by 174) and the front camera (399.7, 29.3, 37 by 37). The camera's centre is the status column's centre, 6 pt inside the band's centre; the inner display's landscape band shows the same 6 pt offset. `statusBarManager.statusBarFrame` reports a 466 by 2 strip and is no use here.
+- `MainTabs.tsx`'s root applies `marginLeft/marginRight` from the insets. Inside it, `panels/MainTabsNavigatorPanel.tsx` renders the tabs navigator (`you_bar/YouBarStackNavigator.tsx`, a memo rendered without props) and, beside it, the chat panels for `channel` routes. An open chat is a pushed `channel` route on `main`.
+- To let chats fill the band, Duo Layout moves the trailing margin from `MainTabs` onto the tabs navigator. The server list, notifications and messages keep their inset, so their headers stay clear of the status column and the pill.
+- The server rail is `GuildsBar` (`guilds_bar/native/GuildsBar.tsx`), rendered by `tabs/guilds/HomePanelContent.tsx` inside `components_native/MainChannels.tsx`, which offsets the channel list by `DM_WIDTH` (72, `ConstantsIOS.tsx`). Rendering `GuildsBar` anywhere else crashed Discord natively on every folded launch (0.4.1), so the rail stays where Discord puts it.
+- With Discord's portrait lock released, the outer display rotates: held sideways it is 678 by 466 with the band on the leading edge (safe-area left 84).
+
+## Orientation lock
+
+- `device/native/DeviceOrientation.tsx` locks iPhones to portrait at startup (`lockOrientationForiOS`, skipped on iPadOS) and re-applies the lock on every app activation while `orientationLock` is set. `restoreDefaultOrientation` re-locks through a module-internal call.
+- On the Duo, UIKit's allowed orientations still read "all" (mask 30) while the lock is set, yet whole sessions unfolded into portrait however the phone was held (measured: three portrait unfolds in one session, all landscape in the next). Releasing the lock with Discord's `unlockOrientation` stopped it.
+
 ## YouBar (Discord's bottom navigation)
 
 - `modules/main_tabs_v2/native/you_bar/YouBar.tsx`, rendered by `tabs/guilds/Guilds.tsx` at the bottom of the channel-list panel. Height `YOU_BAR_HEIGHT` 56 plus margins (`you_bar/YouBarConstants.tsx`, `hooks/useYouBarTotalHeight.tsx`).

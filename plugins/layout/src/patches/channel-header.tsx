@@ -1,32 +1,11 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import type { HeaderRow } from '../../../../src/shared/posture.ts';
+import type { HeaderPlacement } from '../../../../src/shared/posture.ts';
+import { rewrite, type Element } from './tree.ts';
 
 type Style = Record<string, unknown>;
-type Element = { type?: unknown; key?: React.Key | null; props?: Record<string, unknown> };
 export type Component = (props: Record<string, unknown>) => unknown;
-
-// Rewrites the first matching elements near the top of a render tree. Branches with no
-// match keep their identity, so React's bailouts still hold there.
-function rewrite(node: unknown, maxDepth: number, visit: (el: Element) => unknown, depth = 0): unknown {
-	if (!node || typeof node !== 'object' || depth > maxDepth) return node;
-	if (Array.isArray(node)) {
-		let changed = false;
-		const next = node.map((child) => {
-			const out = rewrite(child, maxDepth, visit, depth);
-			changed ||= out !== child;
-			return out;
-		});
-		return changed ? next : node;
-	}
-	const el = node as Element;
-	if (!el.props) return node;
-	const replaced = visit(el);
-	if (replaced !== undefined) return replaced;
-	const children = rewrite(el.props.children, maxDepth, visit, depth + 1);
-	return children === el.props.children ? node : React.cloneElement(node as React.ReactElement<{ children: unknown }>, { children });
-}
 
 // Discord's channel header gives its root the safe-area top, as padding or (beside the
 // channel list) as a margin, together with a minimum height. That pairing is the signature.
@@ -39,27 +18,29 @@ function headerEntry(style: unknown): Style | undefined {
 	});
 }
 
-// The header's style moved up to the shared header row, its trailing buttons clear of the
-// status bar. Its surface runs to the top edge, so the band reads as part of the header.
-function lifted(style: unknown[], entry: Style, row: HeaderRow): unknown[] {
+// The header's style with its trailing buttons clear of the system's band. Lifted to a
+// header row, its surface also runs to the top edge, so the band reads as part of the header.
+function placed(style: unknown[], entry: Style, placement: HeaderPlacement): unknown[] {
+	if (placement.top == null) return [...style, { paddingRight: placement.trailing }];
 	const padded = typeof entry.paddingTop === 'number';
-	const top = Math.min(row.top, Number(padded ? entry.paddingTop : entry.marginTop));
+	const top = Math.min(placement.top, Number(padded ? entry.paddingTop : entry.marginTop));
 	const minHeight = Number(entry.minHeight) + (padded ? top - Number(entry.paddingTop) : top);
-	return [...style, { marginTop: 0, paddingTop: top, minHeight, borderTopWidth: 0, paddingRight: row.trailing }];
+	return [...style, { marginTop: 0, paddingTop: top, minHeight, borderTopWidth: 0, paddingRight: placement.trailing }];
 }
 
 const frameSlot = { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 1 } as const;
 
-// Edits a rendered channel header's root: lifted to `row` when given, with `extra` appended
-// after Discord's children so theirs keep their positions. Discord's `frame` fades in a bar
-// as tall as the safe-area top when the chat expands; the lifted header's own surface covers
-// that band, so the bar is cut away. It is always slotted, so lifting never remounts it.
-// The same tree when the signature is absent.
-export function editChannelHeader(tree: unknown, row: HeaderRow | null, extra: React.ReactNode, frame: unknown): unknown {
+// Edits a rendered channel header's root: placed per `placement` when given, with `extra`
+// appended after Discord's children so theirs keep their positions. Discord's `frame` fades
+// in a bar as tall as the safe-area top when the chat expands; a lifted header's own surface
+// covers that band, so the bar is cut away. It is always slotted, so lifting never remounts
+// it. The same tree when the signature is absent.
+export function editChannelHeader(tree: unknown, placement: HeaderPlacement | null, extra: React.ReactNode, frame: unknown): unknown {
+	const lifted = placement?.top != null;
 	return rewrite(tree, 3, (el) => {
 		if (frame && el === frame) {
 			return (
-				<View key='duo-header-frame-slot' pointerEvents='none' style={[frameSlot, row && { height: 0, overflow: 'hidden' }]}>
+				<View key='duo-header-frame-slot' pointerEvents='none' style={[frameSlot, lifted && { height: 0, overflow: 'hidden' }]}>
 					{frame as React.ReactNode}
 				</View>
 			);
@@ -70,7 +51,7 @@ export function editChannelHeader(tree: unknown, row: HeaderRow | null, extra: R
 		const children = el.props!.children;
 		return React.cloneElement(
 			el as React.ReactElement<{ style: unknown; children: unknown }>,
-			{ style: row ? lifted(style as unknown[], entry, row) : style },
+			{ style: placement ? placed(style as unknown[], entry, placement) : style },
 			...(Array.isArray(children) ? children : [children]),
 			extra,
 		);

@@ -11,7 +11,12 @@ export function whenAllLoaded(paths: string[], apply: (modules: any[]) => Cleanu
 	void Promise.all(
 		paths.map((path) => metro.findLazy(metro.filters.byFilePath(path), { interop: false, signal: controller.signal })),
 	).then((modules) => {
-		if (!controller.signal.aborted) remove = apply(modules);
+		if (controller.signal.aborted) return;
+		try {
+			remove = apply(modules);
+		} catch (error) {
+			console.error(`[Duo] a feature failed to start once Discord loaded it, and stays off: ${String(error)}`);
+		}
 	}, () => {});
 
 	return () => {
@@ -19,6 +24,20 @@ export function whenAllLoaded(paths: string[], apply: (modules: any[]) => Cleanu
 		remove?.();
 		remove = undefined;
 	};
+}
+
+const components = new Map<string, any>();
+
+// A Discord component this plugin renders itself. Discord requires many components inline,
+// on first render; while its own copy is hidden nothing has loaded the module yet, so this
+// one initializes it, the way Discord's render would. Found modules are kept.
+export function findComponent(path: string): any {
+	if (!components.has(path)) {
+		const found = metro.find(metro.filters.byFilePath(path), { interop: false, initialize: true } as Parameters<typeof metro.find>[1]);
+		if (!found) return undefined;
+		components.set(path, found);
+	}
+	return components.get(path);
 }
 
 // Only modules Discord already initialized: a plain find would run a module's top-level

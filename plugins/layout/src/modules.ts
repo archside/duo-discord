@@ -15,12 +15,15 @@ export const paths = {
 	guilds: 'modules/main_tabs_v2/native/tabs/guilds/Guilds.tsx',
 	channelScreen: 'modules/main_tabs_v2/native/channel/StandaloneChannelScreen.tsx',
 	mainTabs: 'modules/main_tabs_v2/native/MainTabs.tsx',
+	mainTabsPanel: 'modules/main_tabs_v2/native/panels/MainTabsNavigatorPanel.tsx',
+	youBarStack: 'modules/main_tabs_v2/native/you_bar/YouBarStackNavigator.tsx',
 	youBar: 'modules/main_tabs_v2/native/you_bar/YouBar.tsx',
 	youBarTotalHeight: 'modules/main_tabs_v2/native/you_bar/hooks/useYouBarTotalHeight.tsx',
 	youBarConstants: 'modules/main_tabs_v2/native/you_bar/YouBarConstants.tsx',
 	rootNavigationRef: 'modules/main_tabs_v2/RootNavigationRef.native.tsx',
 	navigationRouteUtils: 'modules/main_tabs_v2/helpers/NavigationRouteUtils.native.tsx',
 	voiceCardLayout: 'modules/voice_panel/native/card/VoicePanelCardLayoutManager.tsx',
+	deviceOrientation: 'modules/device/native/DeviceOrientation.tsx',
 	dimensionsStores: [
 		'modules/screen/native/DimensionsStore.ios.tsx',
 		'modules/screen/native/DimensionsStore.tsx',
@@ -43,3 +46,7 @@ export const Patcher = patcher.createPatcher('duo.layout');
 
 // Set in start(): the live window shape, or the flat stand-in without a native bridge.
 export const sensor: { current: ShapeSensor } = { current: flatSensor };
+
+// Whether Discord's tabs navigator can take over MainTabs' trailing margin, so chats may fill
+// the side band: 'on' once patched, 'missing' if the navigator was not where it was expected.
+export const tabsInset: { state: 'off' | 'on' | 'missing' } = { state: 'off' };

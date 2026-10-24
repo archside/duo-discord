@@ -3,7 +3,7 @@
 	"private": true,
 	"type": "module",
 	"description": "Unbound plugins that adapt Discord for iPhone Duo.",
-	"license": "GPL-3.0-only",
+	"license": "MIT",
 	"engines": {
 		"node": ">=24"
 	},

@@ -1,0 +1,13 @@
+{
+	"recorded": "2026-10-24T19:33:44Z..19:34:00Z",
+	"build": "stamped sdk27.1",
+	"posture": "open in landscape, partially folded like a book, held 16 s",
+	"window": { "width": 951, "height": 669 },
+	"regions": [
+		{ "kind": "division", "active": true, "frame": { "x": 456, "y": 0, "width": 40, "height": 669 } },
+		{ "kind": "occlusion", "active": false, "frame": { "x": 659, "y": 22, "width": 62, "height": 40 }, "note": "inner camera, off" },
+		{ "kind": "occlusion", "active": true, "frame": { "x": 867, "y": 0, "width": 84, "height": 124 }, "note": "system controls, top trailing" }
+	],
+	"discord": { "isChatBesideChannelList": true, "isChatLockedOpen": true, "tiledSidebar": 332 },
+	"observation": "Folding changes no window size; only the division region turns active. The stock tiled sidebar (332 pt) leaves the chat column crossing the fold at x 456-496."
+}

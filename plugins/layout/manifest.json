@@ -1,0 +1,20 @@
+{
+	"id": "duo.layout",
+	"name": "Duo Layout",
+	"description": "Bespoke iPhone Duo layout: columns, fold continuity, a status-strip rail, book split and tabletop calls. Each part has a switch.",
+	"authors": [
+		{
+			"name": "Duo Discord",
+			"id": "0"
+		}
+	],
+	"version": "0.3.7",
+	"icon": "ChannelListIcon",
+	"capabilities": [
+		"native.objc.classes",
+		"native.objc.invoke",
+		"native.objc.hooks"
+	],
+	"minNativePluginApi": "1.0.0",
+	"main": "src/index.tsx"
+}

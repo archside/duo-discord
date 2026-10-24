@@ -1,0 +1,7 @@
+node_modules/
+dist/
+*.ipa
+__pycache__/
+
+# Unbound artifacts and IPAs stay local; reinstall the original IPA to roll back.
+downloads/

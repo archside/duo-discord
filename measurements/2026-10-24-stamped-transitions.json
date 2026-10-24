@@ -1,0 +1,1313 @@
+{
+ "recorded": "2026-10-24",
+ "build": "stamped sdk27.1",
+ "duoLayout": "not installed",
+ "note": "consecutive environment events: the first carries the previous native snapshot, the second the refreshed one",
+ "events": [
+  {
+   "cause": "environment",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    null,
+    null
+   ],
+   "safeArea": {
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+    "left": 0
+   },
+   "discord": "layout module not loaded",
+   "division": [],
+   "keyboard": null
+  },
+  {
+   "cause": "keyboardDidChangeFrame",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    null,
+    null
+   ],
+   "safeArea": {
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+    "left": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 669,
+    "screenX": 0,
+    "height": 0,
+    "screenY": 951
+   }
+  },
+  {
+   "cause": "keyboardDidHide",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    null,
+    null
+   ],
+   "safeArea": {
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+    "left": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 669,
+    "screenX": 0,
+    "height": 0,
+    "screenY": 951
+   }
+  },
+  {
+   "cause": "keyboardDidChangeFrame",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    null,
+    null
+   ],
+   "safeArea": {
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+    "left": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 669,
+    "screenX": 0,
+    "height": 0,
+    "screenY": 951
+   }
+  },
+  {
+   "cause": "keyboardDidShow",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    null,
+    null
+   ],
+   "safeArea": {
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+    "left": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 669,
+    "screenX": 0,
+    "height": 0,
+    "screenY": 951
+   }
+  },
+  {
+   "cause": "keyboardDidChangeFrame",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    null,
+    null
+   ],
+   "safeArea": {
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+    "left": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 669,
+    "screenX": 0,
+    "height": 0,
+    "screenY": 951
+   }
+  },
+  {
+   "cause": "keyboardDidHide",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    null,
+    null
+   ],
+   "safeArea": {
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+    "left": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 669,
+    "screenX": 0,
+    "height": 0,
+    "screenY": 951
+   }
+  },
+  {
+   "cause": "environment",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    null,
+    null
+   ],
+   "safeArea": {
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+    "left": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": null
+  },
+  {
+   "cause": "environment",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    null,
+    null
+   ],
+   "safeArea": {
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+    "left": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": null
+  },
+  {
+   "cause": "environment",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    null,
+    null
+   ],
+   "safeArea": {
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+    "left": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": null
+  },
+  {
+   "cause": "environment",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    null,
+    null
+   ],
+   "safeArea": {
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+    "left": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": null
+  },
+  {
+   "cause": "keyboardDidChangeFrame",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    null,
+    null
+   ],
+   "safeArea": {
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+    "left": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 669,
+    "screenX": 0,
+    "height": 0,
+    "screenY": 951
+   }
+  },
+  {
+   "cause": "keyboardDidHide",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    null,
+    null
+   ],
+   "safeArea": {
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+    "left": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 669,
+    "screenX": 0,
+    "height": 0,
+    "screenY": 951
+   }
+  },
+  {
+   "cause": "start",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    null,
+    null
+   ],
+   "safeArea": {
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+    "left": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": null
+  },
+  {
+   "cause": "environment",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 82,
+    "left": 0,
+    "bottom": 34,
+    "right": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [
+    {
+     "kind": "division",
+     "frame": {
+      "x": 0,
+      "y": 455.5,
+      "width": 669,
+      "height": 40
+     },
+     "active": false
+    }
+   ],
+   "keyboard": null
+  },
+  {
+   "cause": "environment",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 82,
+    "left": 0,
+    "bottom": 34,
+    "right": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [
+    {
+     "kind": "division",
+     "frame": {
+      "x": 0,
+      "y": 455.5,
+      "width": 669,
+      "height": 40
+     },
+     "active": false
+    }
+   ],
+   "keyboard": null
+  },
+  {
+   "cause": "environment",
+   "window": {
+    "width": 951,
+    "height": 669
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 82,
+    "left": 0,
+    "bottom": 34,
+    "right": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": true
+   },
+   "division": [
+    {
+     "kind": "division",
+     "frame": {
+      "x": 0,
+      "y": 455.5,
+      "width": 669,
+      "height": 40
+     },
+     "active": false
+    }
+   ],
+   "keyboard": null
+  },
+  {
+   "cause": "environment",
+   "window": {
+    "width": 951,
+    "height": 669
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 0,
+    "left": 0,
+    "bottom": 34,
+    "right": 84
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": true
+   },
+   "division": [
+    {
+     "kind": "division",
+     "frame": {
+      "x": 455.5,
+      "y": 0,
+      "width": 40,
+      "height": 669
+     },
+     "active": false
+    }
+   ],
+   "keyboard": null
+  },
+  {
+   "cause": "keyboardDidChangeFrame",
+   "window": {
+    "width": 951,
+    "height": 669
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 0,
+    "left": 0,
+    "bottom": 34,
+    "right": 84
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": true
+   },
+   "division": [],
+   "keyboard": {
+    "width": 951,
+    "screenX": 5.684341886080802e-14,
+    "height": 0,
+    "screenY": 669
+   }
+  },
+  {
+   "cause": "keyboardDidShow",
+   "window": {
+    "width": 951,
+    "height": 669
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 0,
+    "left": 0,
+    "bottom": 34,
+    "right": 84
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": true
+   },
+   "division": [],
+   "keyboard": {
+    "width": 951,
+    "screenX": 5.684341886080802e-14,
+    "height": 0,
+    "screenY": 669
+   }
+  },
+  {
+   "cause": "environment",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 0,
+    "left": 0,
+    "bottom": 34,
+    "right": 84
+   },
+   "discord": {
+    "isChatBesideChannelList": false,
+    "isChatLockedOpen": false
+   },
+   "division": [
+    {
+     "kind": "division",
+     "frame": {
+      "x": 455.5,
+      "y": 0,
+      "width": 40,
+      "height": 669
+     },
+     "active": false
+    }
+   ],
+   "keyboard": null
+  },
+  {
+   "cause": "environment",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 82,
+    "left": 0,
+    "bottom": 34,
+    "right": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": false,
+    "isChatLockedOpen": false
+   },
+   "division": [
+    {
+     "kind": "division",
+     "frame": {
+      "x": 0,
+      "y": 455.5,
+      "width": 669,
+      "height": 40
+     },
+     "active": false
+    }
+   ],
+   "keyboard": null
+  },
+  {
+   "cause": "keyboardDidChangeFrame",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 82,
+    "left": 0,
+    "bottom": 34,
+    "right": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": false,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 669,
+    "screenX": 0,
+    "height": 0,
+    "screenY": 951
+   }
+  },
+  {
+   "cause": "keyboardDidShow",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 82,
+    "left": 0,
+    "bottom": 34,
+    "right": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": false,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 669,
+    "screenX": 0,
+    "height": 0,
+    "screenY": 951
+   }
+  },
+  {
+   "cause": "keyboardDidChangeFrame",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 82,
+    "left": 0,
+    "bottom": 34,
+    "right": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 0,
+    "screenX": 0,
+    "height": 0,
+    "screenY": 0
+   }
+  },
+  {
+   "cause": "keyboardDidHide",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 82,
+    "left": 0,
+    "bottom": 34,
+    "right": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 0,
+    "screenX": 0,
+    "height": 0,
+    "screenY": 0
+   }
+  },
+  {
+   "cause": "keyboardDidChangeFrame",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 82,
+    "left": 0,
+    "bottom": 34,
+    "right": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 669,
+    "screenX": 0,
+    "height": 366,
+    "screenY": 585
+   }
+  },
+  {
+   "cause": "keyboardDidShow",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 82,
+    "left": 0,
+    "bottom": 34,
+    "right": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 669,
+    "screenX": 0,
+    "height": 366,
+    "screenY": 585
+   }
+  },
+  {
+   "cause": "keyboardDidChangeFrame",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 82,
+    "left": 0,
+    "bottom": 34,
+    "right": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 669,
+    "screenX": 0,
+    "height": 366,
+    "screenY": 951
+   }
+  },
+  {
+   "cause": "keyboardDidHide",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 82,
+    "left": 0,
+    "bottom": 34,
+    "right": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 669,
+    "screenX": 0,
+    "height": 366,
+    "screenY": 951
+   }
+  },
+  {
+   "cause": "keyboardDidChangeFrame",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 82,
+    "left": 0,
+    "bottom": 34,
+    "right": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 669,
+    "screenX": 0,
+    "height": 366,
+    "screenY": 951
+   }
+  },
+  {
+   "cause": "keyboardDidHide",
+   "window": {
+    "width": 669,
+    "height": 951
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 82,
+    "left": 0,
+    "bottom": 34,
+    "right": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 669,
+    "screenX": 0,
+    "height": 366,
+    "screenY": 951
+   }
+  },
+  {
+   "cause": "environment",
+   "window": {
+    "width": 951,
+    "height": 669
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 82,
+    "left": 0,
+    "bottom": 34,
+    "right": 0
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": true
+   },
+   "division": [
+    {
+     "kind": "division",
+     "frame": {
+      "x": 0,
+      "y": 455.5,
+      "width": 669,
+      "height": 40
+     },
+     "active": false
+    }
+   ],
+   "keyboard": null
+  },
+  {
+   "cause": "environment",
+   "window": {
+    "width": 951,
+    "height": 669
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 0,
+    "left": 0,
+    "bottom": 34,
+    "right": 84
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": true
+   },
+   "division": [
+    {
+     "kind": "division",
+     "frame": {
+      "x": 455.5,
+      "y": 0,
+      "width": 40,
+      "height": 669
+     },
+     "active": false
+    }
+   ],
+   "keyboard": null
+  },
+  {
+   "cause": "keyboardDidChangeFrame",
+   "window": {
+    "width": 951,
+    "height": 669
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 0,
+    "left": 0,
+    "bottom": 34,
+    "right": 84
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": true
+   },
+   "division": [],
+   "keyboard": {
+    "width": 951,
+    "screenX": 5.684341886080802e-14,
+    "height": 0,
+    "screenY": 669
+   }
+  },
+  {
+   "cause": "keyboardDidShow",
+   "window": {
+    "width": 951,
+    "height": 669
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 0,
+    "left": 0,
+    "bottom": 34,
+    "right": 84
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": true
+   },
+   "division": [],
+   "keyboard": {
+    "width": 951,
+    "screenX": 5.684341886080802e-14,
+    "height": 0,
+    "screenY": 669
+   }
+  },
+  {
+   "cause": "environment",
+   "window": {
+    "width": 466,
+    "height": 678
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 0,
+    "left": 0,
+    "bottom": 34,
+    "right": 84
+   },
+   "discord": {
+    "isChatBesideChannelList": false,
+    "isChatLockedOpen": false
+   },
+   "division": [
+    {
+     "kind": "division",
+     "frame": {
+      "x": 455.5,
+      "y": 0,
+      "width": 40,
+      "height": 669
+     },
+     "active": false
+    }
+   ],
+   "keyboard": null
+  },
+  {
+   "cause": "environment",
+   "window": {
+    "width": 466,
+    "height": 678
+   },
+   "sizeClass": [
+    "compact",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 0,
+    "left": 0,
+    "bottom": 34,
+    "right": 84
+   },
+   "discord": {
+    "isChatBesideChannelList": false,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": null
+  },
+  {
+   "cause": "keyboardDidChangeFrame",
+   "window": {
+    "width": 466,
+    "height": 678
+   },
+   "sizeClass": [
+    "compact",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 0,
+    "left": 0,
+    "bottom": 34,
+    "right": 84
+   },
+   "discord": {
+    "isChatBesideChannelList": false,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 653.637168141593,
+    "screenX": 0,
+    "height": 0,
+    "screenY": 951
+   }
+  },
+  {
+   "cause": "keyboardDidShow",
+   "window": {
+    "width": 466,
+    "height": 678
+   },
+   "sizeClass": [
+    "compact",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 0,
+    "left": 0,
+    "bottom": 34,
+    "right": 84
+   },
+   "discord": {
+    "isChatBesideChannelList": false,
+    "isChatLockedOpen": false
+   },
+   "division": [],
+   "keyboard": {
+    "width": 653.637168141593,
+    "screenX": 0,
+    "height": 0,
+    "screenY": 951
+   }
+  },
+  {
+   "cause": "environment",
+   "window": {
+    "width": 951,
+    "height": 669
+   },
+   "sizeClass": [
+    "compact",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 0,
+    "left": 0,
+    "bottom": 34,
+    "right": 84
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": true
+   },
+   "division": [],
+   "keyboard": null
+  },
+  {
+   "cause": "environment",
+   "window": {
+    "width": 951,
+    "height": 669
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 0,
+    "left": 0,
+    "bottom": 34,
+    "right": 84
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": true
+   },
+   "division": [
+    {
+     "kind": "division",
+     "frame": {
+      "x": 455.5,
+      "y": 0,
+      "width": 40,
+      "height": 669
+     },
+     "active": false
+    }
+   ],
+   "keyboard": null
+  },
+  {
+   "cause": "keyboardDidChangeFrame",
+   "window": {
+    "width": 951,
+    "height": 669
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 0,
+    "left": 0,
+    "bottom": 34,
+    "right": 84
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": true
+   },
+   "division": [],
+   "keyboard": {
+    "width": 662.4304932735425,
+    "screenX": 273,
+    "height": 0,
+    "screenY": -24
+   }
+  },
+  {
+   "cause": "keyboardDidShow",
+   "window": {
+    "width": 951,
+    "height": 669
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 0,
+    "left": 0,
+    "bottom": 34,
+    "right": 84
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": true
+   },
+   "division": [],
+   "keyboard": {
+    "width": 662.4304932735425,
+    "screenX": 273,
+    "height": 0,
+    "screenY": -24
+   }
+  },
+  {
+   "cause": "keyboardDidChangeFrame",
+   "window": {
+    "width": 951,
+    "height": 669
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 0,
+    "left": 0,
+    "bottom": 34,
+    "right": 84
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": true
+   },
+   "division": [],
+   "keyboard": {
+    "width": 951,
+    "screenX": 0,
+    "height": 0,
+    "screenY": 669
+   }
+  },
+  {
+   "cause": "keyboardDidHide",
+   "window": {
+    "width": 951,
+    "height": 669
+   },
+   "sizeClass": [
+    "regular",
+    "regular"
+   ],
+   "safeArea": {
+    "top": 0,
+    "left": 0,
+    "bottom": 34,
+    "right": 84
+   },
+   "discord": {
+    "isChatBesideChannelList": true,
+    "isChatLockedOpen": true
+   },
+   "division": [],
+   "keyboard": {
+    "width": 951,
+    "screenX": 0,
+    "height": 0,
+    "screenY": 669
+   }
+  }
+ ]
+}

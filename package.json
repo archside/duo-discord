@@ -1,0 +1,32 @@
+{
+	"name": "duo-discord",
+	"private": true,
+	"type": "module",
+	"description": "Unbound plugins that adapt Discord for iPhone Duo.",
+	"license": "GPL-3.0-only",
+	"engines": {
+		"node": ">=24"
+	},
+	"scripts": {
+		"build": "node tools/build.mjs",
+		"serve": "node tools/serve.mjs",
+		"typecheck": "tsc --noEmit -p tsconfig.json",
+		"test": "node --test \"src/**/*.test.ts\" && python -I tools/ipa/test_duo_ipa.py",
+		"device": "node tools/device.mjs",
+		"ipa": "python -I tools/ipa/duo_ipa.py",
+		"smoke": "node tools/smoke.mjs",
+		"check": "npm run typecheck && npm test && npm run build && npm run smoke"
+	},
+	"devDependencies": {
+		"@rollup/plugin-commonjs": "29.0.3",
+		"@rollup/plugin-node-resolve": "16.0.3",
+		"@swc/core": "1.16.20",
+		"@types/node": "24.19.2",
+		"@types/react": "19.3.0",
+		"@unbound-app/api": "0.9.0",
+		"rollup": "4.65.0",
+		"rollup-plugin-swc3": "0.12.1",
+		"typescript": "5.9.3",
+		"ws": "8.22.0"
+	}
+}

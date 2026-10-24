@@ -1,0 +1,31 @@
+{
+	"recorded": "2026-10-24",
+	"ipa": "downloads/unbound-stamped/Unbound-sdk27.1.ipa (sha256 18f69d0b...a987), only LC_BUILD_VERSION sdk changed 26.5 -> 27.1",
+	"infoPlistDTSDKName": "iphoneos26.5 (unchanged)",
+	"posture": "open, portrait (tall), flat",
+	"duoLayout": "not installed",
+	"reactNativeWindow": { "width": 669, "height": 951, "scale": 3, "fontScale": 1 },
+	"uikit": {
+		"window": { "x": 0, "y": 0, "width": 669, "height": 951 },
+		"screen": { "x": 0, "y": 0, "width": 669, "height": 951 },
+		"horizontalSizeClass": "regular",
+		"verticalSizeClass": "regular",
+		"interfaceOrientation": "portrait",
+		"regions": {
+			"division": [{ "frame": { "x": 0, "y": 455.5, "width": 669, "height": 40 }, "margins": { "top": 20, "bottom": 20 }, "active": false }],
+			"occlusion": [
+				{ "frame": { "x": 22.44, "y": 230.45, "width": 39.54, "height": 61.98 }, "active": false, "note": "inner camera, inactive while camera is off" },
+				{ "frame": { "x": 525, "y": 0, "width": 144, "height": 82 }, "active": true, "note": "system controls, top trailing corner" }
+			]
+		}
+	},
+	"discord": {
+		"chatLayout": { "isChatBesideChannelList": true, "isChatLockedOpen": false },
+		"windowClass": "LARGE (2)",
+		"thresholds": [360, 600, 840],
+		"baseWidth": 669,
+		"DRAWER_LEFT_WIDTH_MIN": 332,
+		"drawerWidth": 372,
+		"dimensionsStore": "modules/screen/native/DimensionsStore.ios.tsx, byAppEntry: main, share"
+	}
+}

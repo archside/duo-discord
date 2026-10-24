@@ -1,0 +1,69 @@
+{
+  "recorded": "2026-10-24",
+  "ipa": "downloads/unbound-original/Unbound.ipa (sha256 6363a3d2...4f4f)",
+  "posture": "open, portrait, compatibility box not enlarged",
+  "duoLayout": "not installed",
+  "bundle": {
+    "info": {
+      "CFBundleShortVersionString": "350.0",
+      "CFBundleVersion": "115636",
+      "DTSDKName": "iphoneos26.5",
+      "DTPlatformVersion": "26.5",
+      "MinimumOSVersion": "18.0",
+      "UIDeviceFamily": "[1,2]",
+      "UISupportedInterfaceOrientations": "[\"UIInterfaceOrientationPortrait\",\"UIInterfaceOrientationPortraitUpsideDown\",\"UIInterfaceOrientationLandscapeLeft\",\"UIInterfaceOrientationLandscapeRight\"]",
+      "UIApplicationSceneManifest": "{\"UIApplicationSupportsMultipleScenes\":false,\"UISceneConfigurations\":{\"UIWindowSceneSessionRoleApplication\":[{\"UISceneDelegateClassName\":\"SceneDelegate\",\"UISceneConfigurationName\":\"Default Configuration\"}]}}",
+      "UILaunchStoryboardName": "LaunchScreen"
+    },
+    "osVersion": "27.1"
+  },
+  "environment": {
+    "geometry": {
+      "window": {
+        "width": 375,
+        "height": 667
+      },
+      "safeArea": {
+        "top": 16,
+        "left": 0,
+        "bottom": 20,
+        "right": 0
+      },
+      "fontScale": 1,
+      "horizontalSizeClass": "compact",
+      "verticalSizeClass": "regular"
+    },
+    "reduceMotion": false,
+    "screenReader": false,
+    "discord": {
+      "isChatBesideChannelList": false,
+      "isChatLockedOpen": false
+    },
+    "native": {
+      "window": {
+        "x": 0,
+        "y": 0,
+        "width": 375,
+        "height": 667
+      },
+      "screen": {
+        "x": 0,
+        "y": 0,
+        "width": 375,
+        "height": 667
+      },
+      "safeArea": {
+        "top": 16,
+        "left": 0,
+        "bottom": 20,
+        "right": 0
+      },
+      "horizontalSizeClass": "compact",
+      "verticalSizeClass": "regular",
+      "regions": [],
+      "reservedRegionApi": true,
+      "interfaceOrientation": 1,
+      "idiom": 0
+    }
+  }
+}

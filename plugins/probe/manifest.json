@@ -1,0 +1,11 @@
+{
+	"id": "duo.probe",
+	"name": "Duo Probe",
+	"description": "Reports window bounds, size classes, safe areas, fold regions and build SDK for iPhone Duo work. Its settings can set the PC debugger address.",
+	"authors": [{ "name": "Duo Discord", "id": "0" }],
+	"version": "0.1.3",
+	"icon": "MobilePhoneIcon",
+	"capabilities": ["native.objc.classes", "native.objc.invoke"],
+	"minNativePluginApi": "1.0.0",
+	"main": "src/index.tsx"
+}

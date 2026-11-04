@@ -6,6 +6,7 @@ import { applyColumns } from './features/columns.ts';
 import { keepConversationOnFold } from './features/continuity.ts';
 import { releasePortraitLock } from './features/orientation.ts';
 import { splitAtFold, tabletopCalls } from './features/postures.ts';
+import { applyScrollIndicators } from './features/scroll-indicators.ts';
 import { applyStatusStrip } from './features/status-strip.tsx';
 import { applyAll, whileSetting } from './lifecycle.ts';
 import { sensor } from './modules.ts';
@@ -28,6 +29,7 @@ function start(context?: PluginContext) {
 		releasePortraitLock,
 		() => whileSetting('continuity', true, keepConversationOnFold),
 		applyStatusStrip,
+		applyScrollIndicators,
 		() => whileSetting('book', true, splitAtFold),
 		() => whileSetting('tabletop', true, tabletopCalls),
 		]);
